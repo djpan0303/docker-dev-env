@@ -1,6 +1,12 @@
 FROM ubuntu:22.10
+#add user:group
+RUN groupadd -r djpan && useradd -r -g djpan djpan
 #install locate command
-RUN apt update && apt install locate -y && updatedb && apt install vim -y
+RUN apt update && apt install locate -y && updatedb \
+    && apt install vim -y \
+    && apt install -y sudo \
+    && apt install -y git \
+    && apt install -y cmake
 #install bazel
 RUN apt update && apt install apt-transport-https curl gnupg -y \
     && /bin/sh -c "curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg" \
@@ -10,7 +16,9 @@ RUN apt update && apt install apt-transport-https curl gnupg -y \
 
 #install cgal lib
 RUN apt update && apt install libcgal-dev -y
-#ENTRYPOINT ["/bin/bash"]
-RUN groupadd -r djpan && useradd -r -g djpan djpan
+
+# for cyber
+#RUN apt update && apt install qtbase5-dev
+
 USER djpan
 WORKDIR /home/djpan
