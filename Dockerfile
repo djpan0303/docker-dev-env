@@ -1,6 +1,6 @@
 FROM ubuntu:22.10
-#add user:group
-RUN groupadd -r djpan && useradd -r -g djpan djpan
+#add user&group for djpan and grant sudo privilege to djpan
+RUN groupadd -r djpan && useradd -r -g djpan djpan && echo 'djpan ALL=(ALL)   NOPASSWD:ALL' >> /etc/sudoers
 #install locate command
 RUN apt update && apt install locate -y && updatedb \
     && apt install vim -y \
