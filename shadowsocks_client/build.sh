@@ -4,7 +4,7 @@ CONTAINER_ID="ssclient"
 
 BUILD_ARGS=$*
 
-docker build $BUILD_ARGS -t djpan/${CONTAINER_ID}:${TAG} .
+docker build $BUILD_ARGS -t ${CONTAINER_ID}:${TAG} .
 echo ${TAG} > ${CONTAINER_ID}.tag
 
 echo "remove old images"
