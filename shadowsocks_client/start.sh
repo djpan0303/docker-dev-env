@@ -48,7 +48,7 @@ fi
 function bring_up_container() {
     echo "start new container..."
     TAG=$(cat ${CONTAINER_ID}.tag)
-    docker run -dt \
+    docker run -dt --restart=always \
         -p 127.0.0.1:8118:8118 \
         --name ${CONTAINER_ID} \
         -e SS_PASSWORD=$opt_passwd \
