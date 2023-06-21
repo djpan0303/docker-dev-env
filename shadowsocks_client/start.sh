@@ -102,6 +102,7 @@ echo "check if container running well..."
 container_running=$(docker ps -aq --filter name=${CONTAINER_ID})
 if [ -z "${container_running}" ];then
     bring_up_container
+    source ${USER_CONFIG_FILE}
 fi
 
 ################################verify###########################################################

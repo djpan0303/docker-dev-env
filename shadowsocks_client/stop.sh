@@ -20,6 +20,8 @@ if [ -e $USER_CONFIG_FILE ];then
     sed -i '/export http_proxy=/d' $USER_CONFIG_FILE
     sed -i '/export https_proxy=/d' $USER_CONFIG_FILE
     source ${USER_CONFIG_FILE}
+    unset http_proxy
+    unset https_proxy
 fi
 
 
