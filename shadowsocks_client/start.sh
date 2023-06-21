@@ -65,7 +65,7 @@ bashrc_setup=$(grep http_proxy ${USER_CONFIG_FILE} | head -n 1)
 if [ "$bashrc_setup" = "" ];then
     cat ${USER_CONFIG_FILE} > /tmp/bashrc.tmp
     echo "export http_proxy=http://127.0.0.1:8118" >> /tmp/bashrc.tmp
-    echo "export https_proxy=https://127.0.0.1:8118" >> /tmp/bashrc.tmp
+    echo "export https_proxy=http://127.0.0.1:8118" >> /tmp/bashrc.tmp
     mv /tmp/bashrc.tmp ${USER_CONFIG_FILE}
     source ${USER_CONFIG_FILE}
 fi
