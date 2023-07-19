@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# set -x
+set -x
 
 #####################process arg####################################################
 helpFunction()
@@ -37,25 +37,23 @@ echo "ssclient password:$opt_passwd"
 echo "set up proxy env for local host:$opt_setup_env"
 echo "debug mode:$opt_debug_mode"
 #####################################################################################
-CONTAINER_ID="ssclient"
+IMAGE_ID="ssclient"
 
-LOG_DIR=/tmp/${CONTAINER_ID}
+LOG_DIR=/tmp/${IMAGE_ID}
 echo "create log dir:$LOG_DIR"
 mkdir -p $LOG_DIR
 
-docker tag registry.alittlepig.cc:5000/djpan/${CONTAINER_ID} ${CONTAINER_ID}
+docker pull registry.alittlepig.cc:5000/${IMAGE_ID}
 
 echo "stop exisiting container..."
-container_name=$(docker ps -aq --filter name=${CONTAINER_ID})
+container_name=$(docker ps -aq --filter name=${IMAGE_ID})
 if [ ! -z $container_name ];then
     docker stop $container_name
     docker rm $container_name
 fi
 
-TAG=latest
-if [ "$opt_debug_mode" = "yes" ];then
-    TAG=$(cat ${CONTAINER_ID}.tag)
-fi
+
+TAG=$(cat ${IMAGE_ID}.tag)
 
 
 function bring_up_container() {
@@ -63,12 +61,12 @@ function bring_up_container() {
     
     docker run -dt --restart=always \
         -p 127.0.0.1:8118:8118 \
-        --name ${CONTAINER_ID} \
+        --name ${IMAGE_ID} \
         -e SS_PASSWORD=$opt_passwd \
         -v $LOG_DIR:$LOG_DIR \
-        ${CONTAINER_ID}:${TAG}
+        ${IMAGE_ID}:${TAG}
     
-    docker ps -a --no-trunc | grep "${CONTAINER_ID}"
+    docker ps -a --no-trunc | grep "${IMAGE_ID}"
 }
 
 bring_up_container
@@ -114,7 +112,7 @@ if [ "$opt_setup_env" = "yes" ];then
     ##################################################################################################
 fi
 # echo "check if container running well..."
-# container_running=$(docker ps -aq --filter name=${CONTAINER_ID})
+# container_running=$(docker ps -aq --filter name=${IMAGE_ID})
 # if [ -z "${container_running}" ];then
 #     bring_up_container
 #     source ${USER_CONFIG_FILE}
@@ -128,7 +126,7 @@ curl --proxy "http://127.0.0.1:8118" cip.cc
 
 echo "log in ? ${opt_login}"
 if [ "${opt_login}" = "yes" ];then
-    docker exec -it ${CONTAINER_ID} bash
+    docker exec -it ${IMAGE_ID} bash
 fi
 
 

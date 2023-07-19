@@ -1,11 +1,12 @@
 set -e
 set -x
-CONTAINER_ID="ssclient"
-container_name=$(docker ps -aq --filter name=${CONTAINER_ID})
+IMAGE_ID="ssclient"
+container_name=$(docker ps -aq --filter name=${IMAGE_ID})
 if [ ! -z $container_name ];then
-    docker stop $container_name && docker rm $container_name
+    docker stop $container_name 
+    docker rm $container_name
 fi
-
+exit
 DOCKER_CONFIG_FILE=/etc/systemd/system/docker.service.d/http-proxy.conf
 if [ -e $DOCKER_CONFIG_FILE ];then
     sudo sed -i '/HTTP_PROXY=http/d' $DOCKER_CONFIG_FILE
