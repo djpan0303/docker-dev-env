@@ -6,24 +6,24 @@ set -e
 helpFunction()
 {
    echo ""
-   echo "Usage: $0 [-l yes|no] -p Password [-s yes|no] [-d yes|no]"
+   echo "Usage: $0 [-l yes|no] [-s yes|no] [-d yes|no]"
    echo -e "\t-l do olog in.defaut:no"
-   echo -e "\t-p ssclient password"
    echo -e "\t-d set up proxy env for local host.defaut:no"
    echo -e "\t-d debug mode.defaut:no"
    exit 1 # Exit script after printing help
 }
 
-while getopts "l:p:s:d:" opt
+while getopts "l:s:d:" opt
 do
    case "$opt" in
       l ) opt_login="$OPTARG" ;;
-      p ) opt_passwd="$OPTARG" ;;
       s ) opt_setup_env="$OPTARG" ;;
       d ) opt_debug_mode="$OPTARG" ;;
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
    esac
 done
+
+read "Please input password:" opt_passwd
 
 # Print helpFunction in case parameters are empty
 if [ -z "$opt_passwd" ];then
