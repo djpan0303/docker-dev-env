@@ -1,7 +1,6 @@
 #!/bin/bash
 SS_TYPE=$1
-LOG_DIR=/tmp/ssclient/run.log
-# mkdir -p /tmp/ssclient
+LOG_DIR=/data/log/ssclient_run.log
 touch $LOG_DIR
 
 if [ "$SS_PASSWORD" = "" ];then
@@ -19,7 +18,7 @@ fi
 
 sed -i "s/\"password\": \"\",/\"password\": \"$SS_PASSWORD\",/g" /data/conf/${SS_TYPE}.json
 
-ps aux | grep python |grep shadowsocksR | awk '{print $2}' | xargs -r kill -9
+ps aux | grep python |grep $SS_TYPE | awk '{print $2}' | xargs -r kill -9
 python2.7 /data/$SS_TYPE/shadowsocks/local.py -c /data/conf/${SS_TYPE}.json 2>$LOG_DIR
 
 tail

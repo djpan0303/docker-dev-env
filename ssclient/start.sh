@@ -23,7 +23,7 @@ do
    esac
 done
 
-read "Please input password:" opt_passwd
+read -p "Please input password:" opt_passwd
 
 # Print helpFunction in case parameters are empty
 if [ -z "$opt_passwd" ];then
@@ -63,7 +63,6 @@ function bring_up_container() {
         -p 127.0.0.1:8118:8118 \
         --name ${IMAGE_ID} \
         -e SS_PASSWORD=$opt_passwd \
-        -v $LOG_DIR:$LOG_DIR \
         ${IMAGE_ID}:${TAG}
     
     docker ps -a --no-trunc | grep "${IMAGE_ID}"
@@ -119,7 +118,7 @@ fi
 # fi
 
 ################################verify###########################################################
-echo "where am i?waiting container bring up"
+echo "where am i?waiting for ${IMAGE_ID} bring up"
 sleep 10
 curl --proxy "http://127.0.0.1:8118" cip.cc
 #################################################################################################
