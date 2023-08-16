@@ -14,7 +14,7 @@ helpFunction()
    echo "Usage: $0 [-r yes|no] [-u yes|no] [-c yes|no]"
    echo -e "\t-r remove old image.defaut:no"
    echo -e "\t-c use cache.defaut:yes"
-   echo -e "\t-d upload current image to regsitry server.defaut:no"
+   echo -e "\t-u upload current image to regsitry server.defaut:no"
    exit 1 # Exit script after printing help
 }
 
