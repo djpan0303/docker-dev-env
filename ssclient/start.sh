@@ -53,7 +53,7 @@ if [ ! -z $container_name ];then
 fi
 
 
-TAG=$(cat ${IMAGE_ID}.tag)
+TAG=latest
 
 
 function bring_up_container() {

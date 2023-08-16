@@ -3,8 +3,6 @@ TAG=$(date +%Y%m%d)
 IMAGE_ID="ssclient"
 REPO_REGISTRY=registry.alittlepig.cc:5000
 
-set -x
-
 opt_remove_old_image="no"
 opt_upload_current_image="no"
 opt_use_cache="yes"

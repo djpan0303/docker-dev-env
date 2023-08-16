@@ -16,9 +16,9 @@ if [ $? != 0 ];then
     exit 1
 fi
 
-sed -i "s/\"password\": \"\",/\"password\": \"$SS_PASSWORD\",/g" /data/conf/${SS_TYPE}.json
+sed -i "s/\"password\": \"\",/\"password\": \"$SS_PASSWORD\",/g" /data/ss_package/${SS_TYPE}.json
 
 ps aux | grep python |grep $SS_TYPE | awk '{print $2}' | xargs -r kill -9
-python2.7 /data/$SS_TYPE/shadowsocks/local.py -c /data/conf/${SS_TYPE}.json 2>$LOG_DIR
+python2.7 /data/ss_package/$SS_TYPE/shadowsocks/local.py -c /data/ss_package/${SS_TYPE}.json 2>$LOG_DIR
 
 tail
