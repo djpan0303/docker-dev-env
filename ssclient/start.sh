@@ -55,6 +55,7 @@ fi
 
 TAG=latest
 
+docker tag registry.alittlepig.cc:5000/${IMAGE_ID} ${IMAGE_ID}:${TAG}
 
 function bring_up_container() {
     echo "start new container..."
