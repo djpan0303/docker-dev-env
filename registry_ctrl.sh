@@ -6,7 +6,7 @@ set -e
 helpFunction()
 {
    echo ""
-   echo "Usage: $0 -r image_id:tag -l image_id"
+   echo "Usage: $0 -r image_id:tag -l image_id -i image_id -t tag"
    echo "-r remove image"
    echo "-l list image tag list"
    exit 1 # Exit script after printing help
@@ -17,6 +17,8 @@ do
    case "$opt" in
       r ) opt_remove_image="$OPTARG" ;;
       l ) opt_list_image="$OPTARG" ;;
+      i ) opt_push_image_id="$OPTARG" ;;
+      t ) opt_push_image_tag="$OPTARG" ;;
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
    esac
 done
@@ -40,4 +42,16 @@ fi
 if [ ! -z "$opt_list_image" ];then
     echo "list $opt_list_image tag list"
     curl -sSL "http://registry.alittlepig.cc:5000/v2/ssclient/tags/list" | jq
+fi
+
+if [ ! -z "$opt_push_image_id" ];then
+    target_image = "${REPO_REGISTRY}/$opt_push_image_id:latest"
+    docker tag "$opt_push_image_id:$opt_push_image_tag" ${target_image}
+    echo "please make sure add 
+        {
+        "insecure-registries": ["registry.alittlepig.cc:5000"]
+        }
+    to /etc/docker/daemon.json
+    "
+    docker push ${target_image}
 fi
