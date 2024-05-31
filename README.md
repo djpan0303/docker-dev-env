@@ -26,7 +26,7 @@ image_ctrl.sh --build ssclient
 
 build image and remove old image of current date
 ```
-image_ctrl.sh --cbuildssclient
+image_ctrl.sh --cbuild ssclient
 ```
 
 push image to registry server

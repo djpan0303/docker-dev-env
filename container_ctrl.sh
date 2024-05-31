@@ -20,8 +20,9 @@ function start() {
     tag_id=$(cat $tag_file)
     image_tag=$image_id:$tag_id
     docker pull "$REPO_REGISTRY/$image_tag"
+    docker tag "$REPO_REGISTRY/$image_tag" $image_tag
     # place your config file under /data/conf
-    mkdir -p $CONFIG_DIR
+    sudo mkdir -p $CONFIG_DIR
     echo "start new container..."
     docker run -dt --restart=always \
         -p 127.0.0.1:8118:8118 \
