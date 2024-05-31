@@ -1,35 +1,19 @@
 #!/bin/bash
 set -e
-# set -x
+set -x
 
-#####################process arg####################################################
-helpFunction()
-{
-   echo ""
-   echo "Usage: $0 -r image_id:tag -l image_id -i image_id -t tag"
-   echo "-r remove image"
-   echo "-l list image tag list"
-   exit 1 # Exit script after printing help
-}
 
-while getopts "r:l:" opt
-do
-   case "$opt" in
-      r ) opt_remove_image="$OPTARG" ;;
-      l ) opt_list_image="$OPTARG" ;;
-      i ) opt_push_image_id="$OPTARG" ;;
-      t ) opt_push_image_tag="$OPTARG" ;;
-      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
-   esac
-done
-
+source ./config.sh
 
 # https://gist.github.com/jaytaylor/86d5efaddda926a25fa68c263830dac1
-REPO_REGISTRY=registry.alittlepig.cc:5000
-# Print helpFunction in case parameters are empty
-if [ ! -z "$opt_remove_image" ];then
-    image_id=$(echo $opt_remove_image | cut -d ':' -f 1)
-    tag_id=$(echo $opt_remove_image | cut -d ':' -f 2)
+function remove() {
+    image_tag=$1
+    check_param_empty $image_tag "image_tag"
+
+    echo "remove $image_tag from registry"
+
+    image_id=$(echo ${image_tag} | cut -d ':' -f 1)
+    tag_id=$(echo ${image_tag} | cut -d ':' -f 2)
     curl -v -sSL -X DELETE "http://${REPO_REGISTRY}/v2/${image_id}/manifests/$(
         curl -sSL -I \
             -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
@@ -37,21 +21,63 @@ if [ ! -z "$opt_remove_image" ];then
         | awk '$1 == "Docker-Content-Digest:" { print $2 }' \
         | tr -d $'\r' \
     )"
-fi
+}
 
-if [ ! -z "$opt_list_image" ];then
-    echo "list $opt_list_image tag list"
-    curl -sSL "http://registry.alittlepig.cc:5000/v2/ssclient/tags/list" | jq
-fi
 
-if [ ! -z "$opt_push_image_id" ];then
-    target_image = "${REPO_REGISTRY}/$opt_push_image_id:latest"
-    docker tag "$opt_push_image_id:$opt_push_image_tag" ${target_image}
-    echo "please make sure add 
-        {
-        "insecure-registries": ["registry.alittlepig.cc:5000"]
-        }
-    to /etc/docker/daemon.json
-    "
-    docker push ${target_image}
-fi
+function list() {
+    image_id=$1
+    check_param_empty $image_id "image_id"
+    echo "list image $image_id tag list"
+    curl -sSL "http://registry.alittlepig.cc:5000/v2/$image_id/tags/list" | jq
+}
+
+function stop_server() {
+    docker rm -f registry-srv
+    docker rm -f registry-web
+}
+
+function start_server() {
+    REPO_DIR=/home/djpan/registry
+    mkdir -p $REPO_DIR
+
+    stop_server
+
+    docker run -d --restart=always \
+        --name=registry-srv\
+        -p 5000:5000 \
+        -e REGISTRY_STORAGE_DELETE_ENABLED=true\
+        -v $REPO_DIR:/var/lib/registry \
+        registry
+
+    # -e REGISTRY_READONLY=false\
+    docker run -dt --restart=always \
+        --name registry-web \
+        -p 8080:8080 \
+        --link registry-srv\
+        -e REGISTRY_URL=http://registry-srv:5000/v2 \
+        -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web    
+}
+
+
+while [ "$#" -gt 0 ]
+do
+  case "$1" in
+    --remove)
+      remove $2
+      exit 0
+      ;;
+    --list)
+      list $2
+      exit 0
+      ;;
+    --start_server)
+      start_server
+      exit 0
+      ;;
+    --stop_server)
+      stop_server
+      exit 0
+      ;;
+  esac
+  shift
+done
