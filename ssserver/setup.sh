@@ -1,6 +1,6 @@
 set -e
-apt install python2
-apt install python3
+apt install python2 -y
+apt install python3 -y
 
 setup_script_dir=$(dirname $0)
 cd $setup_script_dir
