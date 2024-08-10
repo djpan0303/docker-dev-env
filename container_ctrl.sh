@@ -49,7 +49,7 @@ function login() {
 while [ "$#" -gt 0 ]
 do
   case "$1" in
-    --start)
+    --start | --restart)
       stop $2
       start $2
       exit 0
