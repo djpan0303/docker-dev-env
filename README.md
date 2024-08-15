@@ -1,4 +1,4 @@
-# Registry
+# Docker Setup
 
 开始前务必保证两件事：
 + 设置好域名解析，将registry.tinybear.cc解析到registry server所在的服务器IP
@@ -9,6 +9,26 @@
   "insecure-registries": ["registry.tinybear.cc:5000"]
 }
 ```
+
+搭建registry时docker pull拉取官方镜像可能会拉取失败，需要设置docker代理。
+sudo mkdir -p /etc/systemd/system/docker.service.d
+vim /etc/systemd/system/docker.service.d/http-proxy.conf
+添加如下内容：
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:8118"
+Environment="HTTPS_PROXY=http://127.0.0.1:8118"
+Environment="NO_PROXY=localhost,127.0.0.1"
+
+然后执行如下命令：
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+用如下命令检查代理是否设置正确：
+sudo systemctl show --property=Environment docker
+
+[如何优雅的给 Docker 配置网络代理](https://www.cnblogs.com/Chary/p/18096678)
+
+# Registry Server
 
 deploy and start registry server
 ```
