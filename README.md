@@ -1,11 +1,12 @@
 # Registry
 
 开始前务必保证两件事：
-+ 设置好域名解析，将registry.alittlepig.cc解析到registry server所在的服务器IP
++ 设置好域名解析，将registry.tinybear.cc解析到registry server所在的服务器IP
 + 不论是推送构建好的镜像还是拉取镜像，需要设置号/etc/docker/daemon.json,在其中加入如下配置：
 ```
 {
-"insecure-registries": ["registry.alittlepig.cc:5000"]
+  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"],
+  "insecure-registries": ["registry.tinybear.cc:5000"]
 }
 ```
 
