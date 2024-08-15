@@ -20,5 +20,5 @@ RUN apt update && apt install libcgal-dev -y
 # for cyber
 #RUN apt update && apt install qtbase5-dev
 
-USER djpan
-WORKDIR /home/djpan
+USER pan
+WORKDIR /home/pan

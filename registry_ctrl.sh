@@ -37,9 +37,8 @@ function stop_server() {
 }
 
 function start_server() {
-    REPO_DIR=/home/djpan/registry
-    mkdir -p $REPO_DIR
-
+  mkdir -p $REPO_DIR
+  
     stop_server
 
     docker run -d --restart=always \
