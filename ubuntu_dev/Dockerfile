@@ -1,12 +1,13 @@
-FROM ubuntu:22.10
+FROM ubuntu:20.04
 #add user&group for pan and grant sudo privilege to pan
 RUN groupadd -r pan && useradd -r -g pan pan && echo 'pan ALL=(ALL)   NOPASSWD:ALL' >> /etc/sudoers
+
 #install locate command
-RUN apt update && apt install locate -y && updatedb \
-    && apt install vim -y \
-    && apt install -y sudo \
-    && apt install -y git \
-    && apt install -y cmake
+RUN apt update && apt install mlocate -y && updatedb 
+RUN apt update && apt install vim -y
+RUN apt update && apt install git -y
+RUN export DEBIAN_FRONTEND=noninteractive && apt update && apt install cmake -y
+#RUN export DEBIAN_FRONTEND=noninteractive && apt update && apt install sudo -y
 #install bazel
 RUN apt update && apt install apt-transport-https curl gnupg -y \
     && /bin/sh -c "curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg" \
