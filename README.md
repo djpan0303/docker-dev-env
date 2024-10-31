@@ -34,10 +34,13 @@ deploy and start registry server
 ```
 registry_ctrl --start_server
 ```
+启动服务器后，浏览器上打开tinybear.cc:8080可以看到当前仓库中的镜像。
+
 stop registry server
 ```
 registry_ctrl --stop_server
 ```
+
 
 # Image
 build image without removing old image of current date
