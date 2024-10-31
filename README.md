@@ -43,6 +43,7 @@ registry_ctrl --stop_server
 
 
 # Image
+新增image，需要在container_ctrl.sh的start函数匹配对应的docker启动
 build image without removing old image of current date
 ```
 image_ctrl.sh --build ssclient
