@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-set -x
+# set -x
 
 source $(dirname $0)/config.sh
 
@@ -52,6 +52,10 @@ function login() {
     docker exec -it -u ${USER} $image_id /bin/bash
 }
 
+function test() {
+  curl --proxy "http://127.0.0.1:8118" cip.cc
+}
+
 while [ "$#" -gt 0 ]
 do
   case "$1" in
@@ -66,6 +70,10 @@ do
       ;;
     --stop)
       stop $2
+      exit 0
+      ;;
+    --test)
+      test $2
       exit 0
       ;;
   esac
